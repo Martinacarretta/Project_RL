@@ -1,0 +1,13 @@
+env_id = "ALE/Pacman-v5"
+policy = 'CnnPolicy'
+algorithm = "A2C"
+learning_rate = 5e-4
+gamma = 0.99
+n_steps = 64
+vf_coef = 0.5
+ent_coef = 0.01   
+max_grad_norm = 0.4
+total_timesteps = 3000000
+model_name = "A2C_Pacman"
+export_path = "./exports/"
+videos_path = "./videos/"
