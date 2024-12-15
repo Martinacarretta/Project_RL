@@ -98,8 +98,6 @@ The model is saved every 2000 timesteps in order to have backups and it is evalu
 
 
 ### Results:
-The model is in the folder under the name "[ppo_best_model](ppo_best_model.zip)". 
-
 After 100 episodes of testing, we see a clear improvement of the agent's behavior compared to the untrained agent. When untrained, the rewards range between 10 and 30 while in the agent trained with PPO, the scores ranged from 100 to 400 being the mean reward of 320. 
 
 ![alt text](videos_trained_agent/ppo_trained_agent_episode_20.gif) ![alt text](videos_trained_agent/ppo_trained_agent_episode_30.gif) ![alt text](videos_trained_agent/ppo_trained_agent_episode_40.gif) ![alt text](videos_trained_agent/ppo_trained_agent_episode_50.gif) ![alt text](videos_trained_agent/ppo_trained_agent_episode_60.gif) ![alt text](videos_trained_agent/ppo_trained_agent_episode_70.gif)
@@ -126,8 +124,6 @@ The model is saved every 2000 timesteps in order to have backups and it is evalu
 ![alt text](<photos_for_read_me_and_report/rollout reward mean A2C Pacman.png>)
 
 ### Results:
-The model is in the folder under the name "[a2c_best_model](a2c_best_model.zip)"
-
 As usual, the model was tested with 100 episodes. The improvement over the untrained agent is greater than the one obtained with the PPO. The rewards range between 100 and 700 with a mean test reward of 350. 
 
 ![alt text](videos_trained_agent/a2c_trained_agent_episode_20.gif) ![alt text](videos_trained_agent/a2c_trained_agent_episode_30.gif) ![alt text](videos_trained_agent/a2c_trained_agent_episode_40.gif) ![alt text](videos_trained_agent/a2c_trained_agent_episode_50.gif) ![alt text](videos_trained_agent/a2c_trained_agent_episode_60.gif) ![alt text](videos_trained_agent/a2c_trained_agent_episode_70.gif)
