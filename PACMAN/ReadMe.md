@@ -11,11 +11,9 @@ This repository contains the files used to train agent to play [Pacman](https://
 - [Training](#training)
     - [Requirements](#requirements)
     - [Training - PPO](#training---ppo)
-        - [Preprocessing](#preprocessing-ppo)
         - [Training](#training-ppo)
         - [Results](#results-ppo)
     - [Training - A2C](#training---a2c)
-        - [Preprocessing](#preprocessing-a2c)
         - [Training](#training-a2c)
         - [Results](#results-a2c)
 - [Conclusion](#conclusion)
@@ -45,9 +43,11 @@ element is an integer between 0 and 255
 First and foremost, we wanted to see how an untrained agent would perform to have an ide on how the game worked. The untrained agent typically gets a score within the range of 10 to 30. Occasionally, it exceeds this range, achieving rewards between 50 and 100.
 The gifs below represents an untrained agent. 
 
-FALA POSAR GIFS (3) DEL UNTRAINED PACMAN
+![alt text](videos_untrained_agent/untrained_agent_episode_50.gif) ![alt text](videos_untrained_agent/untrained_agent_episode_60.gif) ![alt text](videos_untrained_agent/untrained_agent_episode_70.gif)
 
-FALTA POSAR EL PLOT DELS REWARDS DEL TEST DE 10 EPISODIS UNTRAINED
+
+![alt text](<photos_for_read_me_and_report/untrained.png>)
+
 
 ## Training:
 We decided to tackle this part of the project with 2 different algorithms:
@@ -56,18 +56,24 @@ We decided to tackle this part of the project with 2 different algorithms:
 
 ### Requirements:
 The code requires the following libraries:
-FALTA
+- Python 3.8+
+- PyTorch
+- Gymnasium (with ALE for Atari games)
+- OpenCV
+- Matplotlib
+- NumPy
+- Pillow
+- Weights & Biases (WandB) for tracking experiments
 
 to install them all, you can use:
-FALTA
+`pip install torch gymnasium ale-py shimmy numpy matplotlib opencv-python pillow wandb`
+
+To play Atari games like Pong and Pac-Man, install the additional Gymnasium components with Atari support:
+`pip install gymnasium[atari,accept-rom-license]`
 
 ## Training - PPO:
 
 Similarly to, and for the same reason as, the skiing training, the parameters used in this algorithm have been the default values from PPO. 
-
-### Preprocessing:
-
-FALTA
 
 ### Training:
 
@@ -88,16 +94,20 @@ The hyperparameters used are the following ones:
 
 The model is saved every 2000 timesteps in order to have backups and it is evaluated every 1000 timesteps and only saved if the evaluation results are better than the best result. 
 
-### Results:
-The model is under the name "FALTA .pth". After 100 episodes of testing, we see a clear improvement of the agent's behavior compared to the untrained agent. When untrained, the rewards range between 10 and 30 while in the agent trained with PPO, the scores ranged from 100 to 400 being the mean reward of 320. 
+![alt text](<photos_for_read_me_and_report/rollout reward mean PPO Pacman.png>)
 
-FALTA GIFS DEL TEST DEL DQN I EL PLOT DELS REWARDS
+
+### Results:
+The model is in the folder under the name "[ppo_best_model](ppo_best_model.zip)". 
+
+After 100 episodes of testing, we see a clear improvement of the agent's behavior compared to the untrained agent. When untrained, the rewards range between 10 and 30 while in the agent trained with PPO, the scores ranged from 100 to 400 being the mean reward of 320. 
+
+![alt text](videos_trained_agent/ppo_trained_agent_episode_20.gif) ![alt text](videos_trained_agent/ppo_trained_agent_episode_30.gif) ![alt text](videos_trained_agent/ppo_trained_agent_episode_40.gif) ![alt text](videos_trained_agent/ppo_trained_agent_episode_50.gif) ![alt text](videos_trained_agent/ppo_trained_agent_episode_60.gif) ![alt text](videos_trained_agent/ppo_trained_agent_episode_70.gif)
+
+![alt text](photos_for_read_me_and_report/ppo_test.png)
+
 
 ## Training - A2C:
-
-### Preprocessing:
-
-FALTA
 
 ### Training:
 
@@ -113,14 +123,16 @@ The hyperparameters for this section of the training are the following ones:
 
 The model is saved every 2000 timesteps in order to have backups and it is evaluated every 1000 timesteps and only saved if the evaluation results are better than the best result saved so far. 
 
-FALTA
+![alt text](<photos_for_read_me_and_report/rollout reward mean A2C Pacman.png>)
 
 ### Results:
-The model is under the name "FALTA .pth"
+The model is in the folder under the name "[a2c_best_model](a2c_best_model.zip)"
 
 As usual, the model was tested with 100 episodes. The improvement over the untrained agent is greater than the one obtained with the PPO. The rewards range between 100 and 700 with a mean test reward of 350. 
 
-FALTA GIFS DEL TEST DEL DQN I EL PLOT DELS REWARDS
+![alt text](videos_trained_agent/a2c_trained_agent_episode_20.gif) ![alt text](videos_trained_agent/a2c_trained_agent_episode_30.gif) ![alt text](videos_trained_agent/a2c_trained_agent_episode_40.gif) ![alt text](videos_trained_agent/a2c_trained_agent_episode_50.gif) ![alt text](videos_trained_agent/a2c_trained_agent_episode_60.gif) ![alt text](videos_trained_agent/a2c_trained_agent_episode_70.gif)
+
+![alt text](photos_for_read_me_and_report/a2c_test.png)
 
 ## Conclusion:
 PPO demonstrates more consistent rewards, stabilizing around 400 points, but struggles to achieve higher scores. In contrast, A2C exhibits a broader range of rewards, with some runs reaching up to 700 points. Despite these differences in performance patterns, the average rewards for both algorithms are similar, indicating that their overall performance is comparable.

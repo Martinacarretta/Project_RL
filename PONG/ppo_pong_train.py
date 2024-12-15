@@ -18,6 +18,24 @@ import torch
 
 import ppo_pong_constants as constants
 
+##############LEFT PLAYER
+
+class TransposeAndFlipObservationWrapper(gym.ObservationWrapper):
+    def __init__(self, env):
+        super().__init__(env)
+        original_space = env.observation_space
+        self.observation_space = gym.spaces.Box(
+            low=original_space.low.transpose(2, 0, 1),
+            high=original_space.high.transpose(2, 0, 1),
+            dtype=original_space.dtype
+        )
+
+    def observation(self, observation):
+        observation = np.transpose(observation, (2, 0, 1))
+        # Flip horizontally along the width (axis=2)
+        return np.flip(observation, axis=2)  
+
+
 
 run = wandb.init(
     project="PPO Pong",
@@ -47,36 +65,23 @@ run = wandb.init(
 
 
 env = gym.make("PongNoFrameskip-v4")
+env = Monitor(env)  # Place Monitor wrapper before VecEnv wrappers
 env = ss.color_reduction_v0(env, mode="B")
 env = ss.resize_v1(env, x_size=84, y_size=84)
 env = ss.frame_stack_v1(env, 4)
 env = ss.dtype_v0(env, dtype=np.float32)
 env = ss.normalize_obs_v0(env, env_min=0, env_max=1)
+env = TransposeAndFlipObservationWrapper(env) ############
+print(f"shape and range of the observation space: {env.observation_space.shape}, {env.observation_space.low[0][0][0]}, {env.observation_space.high[0][0][0]}")
+env = DummyVecEnv([lambda: env]) #####################
 
-# env = gym.wrappers.AtariPreprocessing(
-#     env, 
-#     frame_skip=4, 
-#     grayscale_obs=False,  
-#     scale_obs=False  
-#     )
-# env = Monitor(env, allow_early_resets=True) 
-# env = ss.color_reduction_v0(env, mode='B')  # Reduces the color of frames to black and white
-# env = ss.resize_v1(env, x_size=84, y_size=84)  # Resize the observation space
-# env = ss.frame_stack_v1(env, 4)  # Stack 4 frames together
-# env = ss.dtype_v0(env, dtype='uint8')
-# env = DummyVecEnv([lambda: env])
-# env = VecTransposeImage(env)  # Convert channel-last to channel-first (C, H, W)
+print("Observation space details:", env.observation_space)
 
 
-# print("Observation space type:", type(env.observation_space))
-# print("Observation space details:", env.observation_space)
-
-# obs = env.reset()
-# print("Sample observation shape:", obs.shape)
 
 # Define the PPO model
 model = PPO(
-    "MlpPolicy",  
+    "CnnPolicy",  
     env,
     learning_rate = constants.learning_rate,
     gamma = constants.gamma,
@@ -91,34 +96,23 @@ model = PPO(
     max_grad_norm = constants.max_grad_norm,
     verbose = 2,
     tensorboard_log = f"runs/{run.id}",
-    device = 'cuda'
+    device = 'cuda',
+    policy_kwargs={'normalize_images': False},
 )
 
 eval_env = gym.make("PongNoFrameskip-v4")
+eval_env = Monitor(eval_env)  # Place Monitor wrapper before VecEnv wrappers
 eval_env = ss.color_reduction_v0(eval_env, mode="B")
 eval_env = ss.resize_v1(eval_env, x_size=84, y_size=84)
 eval_env = ss.frame_stack_v1(eval_env, 4)
 eval_env = ss.dtype_v0(eval_env, dtype=np.float32)
 eval_env = ss.normalize_obs_v0(eval_env, env_min=0, env_max=1)
-# eval_env = gym.wrappers.AtariPreprocessing(
-#     eval_env, 
-#     frame_skip=4, 
-#     grayscale_obs=False,  
-#     scale_obs=False  
-#     )
-
-# eval_env = Monitor(eval_env, allow_early_resets=True)
-# eval_env = ss.color_reduction_v0(eval_env, mode='B')  # Grayscale
-# eval_env = ss.resize_v1(eval_env, x_size=84, y_size=84)  # Resize
-# eval_env = ss.frame_stack_v1(eval_env, 4)  # Stack 4 frames
-# eval_env = ss.dtype_v0(eval_env, dtype='uint8')  # Correct dtype
-# eval_env = DummyVecEnv([lambda: eval_env])  # VecEnv wrapping
-# eval_env = VecTransposeImage(eval_env)  # Channel-first format
-
+eval_env = TransposeAndFlipObservationWrapper(eval_env)
+eval_env = DummyVecEnv([lambda: eval_env])  # Wrap in DummyVecEnv for vectorization
 
 
 eval_callback = EvalCallback(eval_env, best_model_save_path='./logs/',
-                             log_path='./logs/', eval_freq=500,
+                             log_path='./logs/', eval_freq=1000,
                              deterministic=False, render=False)
 
 checkpoint_callback = CheckpointCallback(
