@@ -3,11 +3,11 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 import wandb
+
 from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env import DummyVecEnv, VecTransposeImage
-
-
 from stable_baselines3.common.callbacks import CallbackList, CheckpointCallback, EvalCallback
+
 import cv2
 import ale_py
 from wandb.integration.sb3 import WandbCallback
