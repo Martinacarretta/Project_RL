@@ -3,7 +3,7 @@ This repository contains the files used to train agent to play [Pong](https://al
 
 ## The game:
 You control the right paddle, you compete against the left paddle controlled by the computer. You each try to keep deflecting the ball away from your goal and into your opponent’s goal.
-FALTA MIRAR SI ES AQUESTA VERSIO DE PONG O LA DE GYM
+We are using the gymnasium environment
 
 ### Action space:
 Pong's action space is Discrete(6). The different actions correspond to:
@@ -82,7 +82,16 @@ These are some of the testing episodes:
 Nevertheless this training was only on the right side. 
 
 ## Additional trials:
-We then tried training the model with the preprocessing needed for the tournament. However, the training did not get satisfactory results. 
+We then tried training the model with the preprocessing needed for the tournament:
+- Grayscale
+- Resizing (84x84)
+- Frame stacking (4 frames)
+- Data type conversion to float32
+- Normalization to ranges [0, 1]
+- Transpose and flip observation from (H, W, C) to (C, H, W)
+
+
+However, the training did not get satisfactory results. 
 We trained one model for the [left](ppo_pong_left_train.py) side and one for the [right](ppo_pong_right_train.py) one. 
 
 ![alt text](photos_for_read_me_and_report/right.png)
