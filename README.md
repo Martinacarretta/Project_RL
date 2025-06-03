@@ -12,3 +12,6 @@ To see the documentation of each agent's training click on the links below:
 [Pacman](PACMAN/ReadMe.md)
 
 [Pong](PONG/ReadMe.md)
+
+
+Subject: Paradigms of Machine learning (reinforcement learning 2024)
